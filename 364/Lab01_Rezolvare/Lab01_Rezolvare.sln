@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36705.20 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab01_Rezolvare", "Lab01_Rezolvare.csproj", "{22CFE42C-E9C9-4A48-89A5-AA0A460C6611}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22CFE42C-E9C9-4A48-89A5-AA0A460C6611}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22CFE42C-E9C9-4A48-89A5-AA0A460C6611}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22CFE42C-E9C9-4A48-89A5-AA0A460C6611}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22CFE42C-E9C9-4A48-89A5-AA0A460C6611}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E6111316-ADDD-4FEC-A2A5-364E0B082F51}
+	EndGlobalSection
+EndGlobal
