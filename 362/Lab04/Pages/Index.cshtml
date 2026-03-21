@@ -1,0 +1,32 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<h1>Stiri</h1>
+<table>
+     <thead>
+         <tr>
+             <th>Title</th>
+             <th>Date</th>
+             <th>Category</th>
+         </tr>
+     </thead>
+     <tbody>
+        @* @{
+            int? val = null;
+            if (val == null)
+                val = 30;
+            val ??= 30;
+            int x = val ?? 20;
+        } *@
+         @foreach (var article in Model.Articles)
+         {
+             <tr>
+                <td><a asp-page="Articles/Details" asp-route-id="@article.Id">@article.Title</a></td>
+                 <td>@article.PublishedAt.ToShortDateString()</td>
+                 <td>@article.Category!.Name</td>
+             </tr>
+         }
+     </tbody>
+</table>

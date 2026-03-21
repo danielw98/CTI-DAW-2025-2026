@@ -1,0 +1,33 @@
+﻿@page
+@model IndexModel
+
+@{ViewData["Title"] = "Lista de stiri";}
+
+<h1>Stiri</h1>
+<h1>Numar Articole: @ViewBag.Count</h1>
+<h2> <a asp-page="./Create">Creaza Articol</a></h2>
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>Categorie</th>
+        </tr>
+    </thead>
+    <tbody>
+        @* @{
+            int? number = null;
+            number ??= 20;
+            int x = number ?? 10;
+
+        } *@
+        @foreach (var article in Model.Articles)
+        {
+            <tr>
+                <td><a asp-page="./Details" asp-route-id="@article.Id">@article.Title</a></td>
+                <td>@article.PublishedAt.ToShortDateString()</td>
+                <td>@article.Category!.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
