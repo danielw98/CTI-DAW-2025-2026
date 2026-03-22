@@ -1,0 +1,26 @@
+@page
+@model IndexModel
+
+<h1>Știri</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Titlu</th>
+            <th>Categorie</th>
+            <th>Data publicării</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var article in Model.Articles)
+        {
+            <tr>
+                <td>
+                    <a asp-page="/Articles/Details" asp-route-id="@article.Id">@article.Title</a>
+                </td>
+                <td>@article.Category!.Name</td>
+                <td>@article.PublishedAt.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>
