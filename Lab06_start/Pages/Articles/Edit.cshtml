@@ -1,0 +1,69 @@
+@page "{id:int}"
+@using Lab06.Pages.Articles
+@model EditModel
+
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8">
+
+        <div class="d-flex align-items-center mb-4 gap-2">
+            <a asp-page="/Index" class="btn btn-outline-secondary btn-sm">← Înapoi</a>
+            <h1 class="h3 mb-0">Editează articolul</h1>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-warning text-dark fw-semibold">
+                Modificare articol
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Article!.Id" />
+
+                    <div class="mb-3">
+                        <label asp-for="Article!.Title" class="form-label fw-semibold"></label>
+                        <input asp-for="Article!.Title" class="form-control" placeholder="Titlul articolului" />
+                        <span asp-validation-for="Article!.Title" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Article!.Content" class="form-label fw-semibold"></label>
+                        <textarea asp-for="Article!.Content" class="form-control" rows="8" placeholder="Conținutul articolului..."></textarea>
+                        <span asp-validation-for="Article!.Content" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Article!.CategoryId" class="form-label fw-semibold"></label>
+                        <select asp-for="Article!.CategoryId" asp-items="Model.Categories" class="form-select">
+                            <option value="">-- Selectați categoria --</option>
+                        </select>
+                        <span asp-validation-for="Article!.CategoryId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Imagine articol</label>
+                        @if (Model.Article?.ImagePath != null)
+                        {
+                            <div class="mb-2">
+                                <img src="@Model.Article.ImagePath"
+                                     alt="Imagine curentă"
+                                     class="img-thumbnail d-block"
+                                     style="max-height: 200px; object-fit: cover;" />
+                                <p class="text-muted small mt-1">Imagine curentă — încarcă una nouă pentru a o înlocui</p>
+                            </div>
+                        }
+                        <input type="file" name="Upload" class="form-control" accept="image/*" />
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-warning fw-semibold px-4">Salvează modificările</button>
+                        <a asp-page="/Index" class="btn btn-outline-secondary">Anulează</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

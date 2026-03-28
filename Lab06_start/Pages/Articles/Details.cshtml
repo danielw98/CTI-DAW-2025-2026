@@ -1,0 +1,18 @@
+@page "{id:int}"
+@using Lab06.Pages.Articles
+@model DetailsModel
+
+<h1>@Model.Article.Title</h1>
+@if (Model.Article.ImagePath != null)
+{
+    <img src="@Model.Article.ImagePath"
+         alt="@Model.Article.Title"
+         class="img-fluid rounded mb-3"
+         style="max-height: 400px; object-fit: cover; width: 100%;" />
+}
+
+<p><strong>Category:</strong> @Model.Article.Category.Name</p>
+<p><strong>Data publicării:</strong> @Model.Article.PublishedAt.ToShortDateString()</p>
+<p>@Model.Article.Content</p>
+
+<a asp-page="/Index">← Înapoi la listă</a>

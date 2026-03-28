@@ -1,0 +1,69 @@
+@page
+@using Lab06.Pages
+@model IndexModel
+
+<h1>Știri</h1>
+
+<p><a asp-page="/Articles/Create" class="btn btn-primary">+ Adaugă articol</a></p>
+
+<form method="get" class="d-flex gap-2 mb-3">
+    <select name="categoryId" class="form-select w-auto">
+        <option value="">-- Toate categoriile --</option>
+        @foreach (var category in Model.Categories)
+        {
+            <option value="@category.Id" selected="@(Model.SelectedCategoryId == category.Id)">
+                @category.Name
+            </option>
+        }
+    </select>
+    <button type="submit" class="btn btn-secondary">Filtrează</button>
+</form>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    @foreach (var article in Model.Articles)
+    {
+        <div class="col">
+            <div class="card h-100" style="cursor: pointer;">
+                @if (article.ImagePath != null)
+                {
+                    <img src="@article.ImagePath" class="card-img-top" alt="@article.Title"
+                         style="height: 200px; object-fit: cover;" />
+                }
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">
+                        <a asp-page="/Articles/Details" asp-route-id="@article.Id"
+                           class="stretched-link text-decoration-none text-dark">@article.Title</a>
+                    </h5>
+                    <p class="card-text">
+                        @(article.Content.Length > 100
+                            ? article.Content[..100] + "..."
+                            : article.Content)
+                    </p>
+                </div>
+                <div class="card-footer" style="position: relative; z-index: 2;">
+                    <small class="text-muted fst-italic">
+                        @article.Category!.Name — @article.PublishedAt.ToShortDateString()
+                    </small>
+                    <div class="mt-1">
+                        <a asp-page="/Articles/Edit" asp-route-id="@article.Id">Editează</a> |
+                        <a asp-page="/Articles/Delete" asp-route-id="@article.Id">Șterge</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<nav class="mt-4">
+    @if (Model.CurrentPage > 1)
+    {
+        <a asp-page="/Index" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-categoryId="@Model.SelectedCategoryId">← Pagina anterioară</a>
+    }
+
+    <span>Pagina @Model.CurrentPage din @Model.TotalPages</span>
+
+    @if (Model.CurrentPage < Model.TotalPages)
+    {
+        <a asp-page="/Index" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-categoryId="@Model.SelectedCategoryId">Pagina următoare →</a>
+    }
+</nav>

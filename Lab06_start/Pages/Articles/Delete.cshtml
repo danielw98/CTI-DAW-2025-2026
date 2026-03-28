@@ -1,0 +1,28 @@
+@page "{id:int}"
+@using Lab06.Pages.Articles
+@model DeleteModel
+
+<h1>Ștergere articol</h1>
+
+<p>Pentru a confirma ștergerea, introduceți titlul articolului:</p>
+
+<div class="mb-3">
+    <h3>@Model.Article.Title</h3>
+    <p><strong>Categorie:</strong> @Model.Article.Category!.Name</p>
+    <p><strong>Data:</strong> @Model.Article.PublishedAt.ToShortDateString()</p>
+    <p>@Model.Article.Content</p>
+</div>
+
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">Tastați titlul pentru confirmare:</label>
+        <input type="text" name="confirmTitle" class="form-control" />
+    </div>
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <p class="text-danger">@Model.ErrorMessage</p>
+    }
+    <button type="submit" class="btn btn-danger">Confirmă ștergerea</button>
+</form>
+
+<a asp-page="/Index">← Înapoi la listă</a>
