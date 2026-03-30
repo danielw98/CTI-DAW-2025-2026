@@ -1,0 +1,17 @@
+{
+  "name": "daw-labs-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static DAW labs website for GitHub Pages",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
+    "dev": "npm run build"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "highlight.js": "^11.11.1",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0"
+  }
+}
