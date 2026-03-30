@@ -199,7 +199,7 @@ public class AppDbContext : DbContext
 În `appsettings.json`, adăugați în secțiunea `ConnectionStrings`:
 
 ```json
-"Lab06": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Lab06_final;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"
+"DefaultConnection": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Lab06_final;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"
 ```
 
 ---
@@ -638,7 +638,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Lab06")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // MVC
 builder.Services.AddControllersWithViews();

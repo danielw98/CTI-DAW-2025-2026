@@ -4,7 +4,7 @@ slug: "lab06"
 order: 6
 excerpt: "Tranzitia de la Razor Pages la MVC, introducerea async/await si structurarea pe Service + Repository."
 downloadUrl: "/downloads/lab06-start.zip"
-repoUrl: "https://github.com/danielw98/DAW-2025-2026/tree/main/Lab06_final"
+repoUrl: "https://github.com/danielw98/CTI-DAW-2025-2026/tree/main/Lab06_start"
 ---
 
 !INCLUDE "./lab06/sections/00-intro.md"
