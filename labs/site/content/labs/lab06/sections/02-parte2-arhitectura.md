@@ -60,9 +60,11 @@ Lab06/
 │   └── User.cs
 ├── Repositories/
 │   ├── IRepository.cs              ← interfață generică
-│   ├── Repository.cs               ← implementare generică (primește DbSet<T>)
+│   ├── Repository.cs               ← implementare generică (primește AppDbContext)
 │   ├── IArticleRepository.cs       ← metode specifice articolelor
 │   ├── ArticleRepository.cs        ← implementare cu Include/OrderBy
+│   ├── ICategoryRepository.cs      ← interfață pentru categorii
+│   ├── CategoryRepository.cs       ← implementare categorii
 │   ├── IUnitOfWork.cs              ← expune repo-urile + SaveChangesAsync
 │   └── UnitOfWork.cs               ← deține AppDbContext, creează repo-uri
 ├── Services/
@@ -106,9 +108,10 @@ Constrângerea `where T : BaseEntity` garantează că orice entitate are `Id` �
 
 ### `Repositories/Repository.cs`
 
-Implementarea generică primește un `DbSet<T>` — nu are acces la întregul `AppDbContext`. Asta înseamnă că nu poate apela `SaveChanges` și nu știe de alte entități.
+Implementarea generică primește `AppDbContext` și accesează `DbSet<T>` prin `context.Set<T>()` — API-ul EF Core pentru entități generice. Nu poate salva — nu are `SaveChanges`.
 
 ```csharp
+using Lab06.Data;
 using Lab06.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -116,29 +119,31 @@ namespace Lab06.Repositories;
 
 public class Repository<T> : IRepository<T> where T : BaseEntity
 {
-    protected readonly DbSet<T> _dbSet;
+    protected readonly AppDbContext _context;
 
-    public Repository(DbSet<T> dbSet)
+    public Repository(AppDbContext context)
     {
-        _dbSet = dbSet;
+        _context = context;
     }
 
     public async Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
-        => await _dbSet.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+        => await _context.Set<T>().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
     public async Task<List<T>> GetAllAsync(CancellationToken cancellationToken = default)
-        => await _dbSet.ToListAsync(cancellationToken);
+        => await _context.Set<T>().ToListAsync(cancellationToken);
 
     public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
-        => await _dbSet.AddAsync(entity, cancellationToken);
+        => await _context.Set<T>().AddAsync(entity, cancellationToken);
 
     public void Update(T entity)
-        => _dbSet.Update(entity);
+        => _context.Set<T>().Update(entity);
 
     public void Delete(T entity)
-        => _dbSet.Remove(entity);
+        => _context.Set<T>().Remove(entity);
 }
 ```
+
+De ce `_context.Set<T>()` și nu `_context.Articles`? Pentru că `T` este generic — compilatorul nu știe la compile time că e `Article`. `Set<T>()` este echivalentul exact al lui `_context.Articles`, rezolvat de EF Core la runtime. În clasele derivate unde `T` este cunoscut (ex. `ArticleRepository`), putem folosi `_context.Articles` direct.
 
 ### `Repositories/IArticleRepository.cs`
 
@@ -157,11 +162,12 @@ public interface IArticleRepository : IRepository<Article>
 }
 ```
 
-> De ce nu avem și `ICategoryRepository`? Pentru categorii avem nevoie doar de `GetAllAsync()` — deja prezent în `IRepository<Category>`. Creăm o interfață specifică **doar când adăugăm metode custom**.
-
 ### `Repositories/ArticleRepository.cs`
 
+Primește `AppDbContext` și folosește `_context.Articles` direct — `T` este cunoscut ca `Article`.
+
 ```csharp
+using Lab06.Data;
 using Lab06.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -169,11 +175,11 @@ namespace Lab06.Repositories;
 
 public class ArticleRepository : Repository<Article>, IArticleRepository
 {
-    public ArticleRepository(DbSet<Article> articles) : base(articles) { }
+    public ArticleRepository(AppDbContext context) : base(context) { }
 
     public async Task<List<Article>> GetAllWithDetailsAsync(CancellationToken cancellationToken = default)
     {
-        return await _dbSet
+        return await _context.Articles
             .Include(a => a.Category)
             .Include(a => a.User)
             .OrderByDescending(a => a.PublishedAt)
@@ -182,7 +188,7 @@ public class ArticleRepository : Repository<Article>, IArticleRepository
 
     public async Task<Article?> GetByIdWithDetailsAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await _dbSet
+        return await _context.Articles
             .Include(a => a.Category)
             .Include(a => a.User)
             .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
@@ -190,7 +196,7 @@ public class ArticleRepository : Repository<Article>, IArticleRepository
 
     public async Task<List<Article>> GetByCategoryAsync(int categoryId, CancellationToken cancellationToken = default)
     {
-        return await _dbSet
+        return await _context.Articles
             .Where(a => a.CategoryId == categoryId)
             .Include(a => a.Category)
             .Include(a => a.User)
@@ -201,6 +207,34 @@ public class ArticleRepository : Repository<Article>, IArticleRepository
 ```
 
 [`Include()`](https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager) face eager loading — fără el, `article.Category` ar fi `null`.
+
+### `Repositories/ICategoryRepository.cs`
+
+```csharp
+using Lab06.Models;
+
+namespace Lab06.Repositories;
+
+public interface ICategoryRepository : IRepository<Category>
+{
+}
+```
+
+Categoriile nu au metode custom — interfața există pentru consistență și testabilitate (în Lab 10 poți mocka `ICategoryRepository` independent).
+
+### `Repositories/CategoryRepository.cs`
+
+```csharp
+using Lab06.Data;
+using Lab06.Models;
+
+namespace Lab06.Repositories;
+
+public class CategoryRepository : Repository<Category>, ICategoryRepository
+{
+    public CategoryRepository(AppDbContext context) : base(context) { }
+}
+```
 
 ---
 
@@ -243,7 +277,8 @@ namespace Lab06.Repositories;
 public interface IUnitOfWork
 {
     IArticleRepository ArticleRepository { get; }
-    IRepository<Category> CategoryRepository { get; }
+    ICategoryRepository CategoryRepository { get; }
+    IRepository<User> UserRepository { get; }
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }
 ```
@@ -263,7 +298,8 @@ public class UnitOfWork : IUnitOfWork
     private readonly AppDbContext _context;
 
     private IArticleRepository? _articleRepository;
-    private IRepository<Category>? _categoryRepository;
+    private ICategoryRepository? _categoryRepository;
+    private IRepository<User>? _userRepository;
 
     public UnitOfWork(AppDbContext context)
     {
@@ -271,17 +307,20 @@ public class UnitOfWork : IUnitOfWork
     }
 
     public IArticleRepository ArticleRepository
-        => _articleRepository ??= new ArticleRepository(_context.Articles);
+        => _articleRepository ??= new ArticleRepository(_context);
 
-    public IRepository<Category> CategoryRepository
-        => _categoryRepository ??= new Repository<Category>(_context.Categories);
+    public ICategoryRepository CategoryRepository
+        => _categoryRepository ??= new CategoryRepository(_context);
+
+    public IRepository<User> UserRepository
+        => _userRepository ??= new Repository<User>(_context);
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         => await _context.SaveChangesAsync(cancellationToken);
 }
 ```
 
-`UnitOfWork` primește `AppDbContext` și creează repository-urile pasând `_context.Articles` respectiv `_context.Categories` — `DbSet<T>`-urile din context. Lazy initialization (`??=`) garantează că aceeași instanță de repository este reutilizată în cadrul aceluiași request.
+`UnitOfWork` primește `AppDbContext` și îl pasează direct fiecărui repository. Lazy initialization (`??=`) garantează că aceeași instanță de repository este reutilizată în cadrul aceluiași request. Repository-urile împart același `_context`, deci `SaveChangesAsync` salvează modificările din toate.
 
 ---
 
