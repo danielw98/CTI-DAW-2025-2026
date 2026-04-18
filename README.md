@@ -2,7 +2,7 @@
 
 Materiale de laborator pentru cursul **Dezvoltarea Aplicatiilor Web**, specializarea CTI.
 
-Site: [danielw98.github.io/CTI-DAW-2025-2026](https://danielw98.github.io/CTI-DAW-2025-2026)
+Site: [daw.danielwagner.ro](https://daw.danielwagner.ro)
 
 Proiectul central al cursului este un **News Portal** construit progresiv pe parcursul semestrului, pornind de la un proiect ASP.NET Core simplu si ajungand la o aplicatie completa cu autentificare, API REST si frontend Angular.
 
@@ -18,6 +18,7 @@ Proiectul central al cursului este un **News Portal** construit progresiv pe par
 | Lab 4 | EF Core + Razor Pages | Entity Framework Core, Razor Pages, SQL Server LocalDB, Migrations |
 | Lab 5 | CRUD complet cu Razor Pages | Tag Helpers, model binding, paginare, relatii |
 | Lab 6 | MVC + Service Layer + Repository Pattern | MVC, async/await, DI, Service Layer, Repository, Unit of Work |
+| Lab 7 | Autentificare si Autorizare | ASP.NET Core Identity, Roles, Content Ownership, `[Authorize]` |
 
 ---
 
