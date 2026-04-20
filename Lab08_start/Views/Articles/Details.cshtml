@@ -1,0 +1,35 @@
+@model ArticleViewModel
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1>@Model.Title</h1>
+        @if (Model.ImagePath != null)
+        {
+            <img src="@Model.ImagePath" alt="@Model.Title"
+                 class="img-fluid rounded mb-3"
+                 style="max-height: 400px; object-fit: cover; width: 100%;" />
+        }
+        <p class="text-muted">
+            <strong>Categorie:</strong> @Model.CategoryName |
+            <strong>Autor:</strong> @Model.AuthorName |
+            <strong>Publicat:</strong> @Model.PublishedAt.ToShortDateString()
+        </p>
+        <hr />
+        <p>@Model.Content</p>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <a asp-action="Edit" asp-route-id="@Model.Id"
+                   class="btn btn-warning w-100 mb-2">Editare</a>
+                <a asp-action="Delete" asp-route-id="@Model.Id"
+                   class="btn btn-danger w-100 mb-2">Ștergere</a>
+                <a asp-action="Index" class="btn btn-secondary w-100">Înapoi</a>
+            </div>
+        </div>
+    </div>
+</div>

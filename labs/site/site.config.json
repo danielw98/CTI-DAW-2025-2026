@@ -1,9 +1,0 @@
-{
-  "siteTitle": "DAW 2025-2026",
-  "siteSubtitle": "Laborator",
-  "description": "Resurse pentru laboratoare DAW: ghiduri, cod de start si materiale pentru studenti.",
-  "basePath": "/",
-  "githubRepoUrl": "https://github.com/danielw98/CTI-DAW-2025-2026",
-  "contentDir": "content/labs",
-  "downloadsDir": "public/downloads"
-}
