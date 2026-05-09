@@ -20,7 +20,10 @@ Proiectul central al cursului este un **News Portal** construit progresiv pe par
 | Lab 6 | MVC + Service Layer + Repository Pattern | MVC, async/await, DI, Service Layer, Repository, Unit of Work |
 | Lab 7 | Autentificare si Autorizare | ASP.NET Core Identity, Roles, Content Ownership, `[Authorize]` |
 | Lab 8 | Web API, DTOs, Swagger si JWT | Records, extension methods mapping, Swagger/OpenAPI, JWT Bearer, dual auth (Cookie + JWT) |
-| Lab 9 | Testing — Unit si Integration | xUnit, FluentAssertions, Moq, `WebApplicationFactory<Program>`, EF Core InMemory |
+| Lab 9 | Testing - Unit si Integration | xUnit, FluentAssertions, Moq, `WebApplicationFactory<Program>`, EF Core InMemory |
+| Lab 10 | Many-to-Many, Middleware, Logging | Tag entity + `ArticleTag` junction, middleware custom (logging + exception handling), Serilog (Console + File) |
+| Lab 11 | Angular Frontend - Part 1 | Angular CLI, CORS, RxJS, HttpClient, JWT decode in localStorage, AuthGuard, HTTP Interceptor |
+| Lab 12 | Angular Frontend - Part 2 | Reactive Forms (FormBuilder + Validators), routing CRUD, role-based UI, delete cu confirm |
 
 ---
 
