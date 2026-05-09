@@ -1,0 +1,59 @@
+<div class="container mt-5" style="max-width: 480px;">
+  <h2 class="mb-4">Inregistrare</h2>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input id="email" type="email" class="form-control"
+             formControlName="email"
+             [class.is-invalid]="submitted && f['email'].invalid">
+      <div *ngIf="submitted && f['email'].invalid" class="invalid-feedback">
+        Email obligatoriu si valid.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="fullName" class="form-label">Nume complet</label>
+      <input id="fullName" type="text" class="form-control"
+             formControlName="fullName"
+             [class.is-invalid]="submitted && f['fullName'].invalid">
+      <div *ngIf="submitted && f['fullName'].invalid" class="invalid-feedback">
+        Numele e obligatoriu (min. 3 caractere).
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Parola</label>
+      <input id="password" type="password" class="form-control"
+             formControlName="password"
+             [class.is-invalid]="submitted && f['password'].invalid">
+      <div *ngIf="submitted && f['password'].invalid" class="invalid-feedback">
+        Parola obligatorie (min. 6 caractere).
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirma parola</label>
+      <input id="confirmPassword" type="password" class="form-control"
+             formControlName="confirmPassword"
+             [class.is-invalid]="submitted && (f['confirmPassword'].invalid || registerForm.errors?.['passwordsMismatch'])">
+      <div *ngIf="submitted && f['confirmPassword'].invalid" class="invalid-feedback">
+        Confirmarea parolei e obligatorie.
+      </div>
+      <div *ngIf="submitted && f['confirmPassword'].valid && registerForm.errors?.['passwordsMismatch']"
+           class="invalid-feedback d-block">
+        Parolele nu coincid.
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100" [disabled]="loading">
+      {{ loading ? 'Se inregistreaza...' : 'Inregistrare' }}
+    </button>
+  </form>
+
+  <p class="mt-3 text-center">
+    Ai deja cont? <a routerLink="/login">Conectare</a>
+  </p>
+</div>

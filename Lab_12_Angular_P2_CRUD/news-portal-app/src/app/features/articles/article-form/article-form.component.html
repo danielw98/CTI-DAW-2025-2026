@@ -1,0 +1,21 @@
+<div class="container mt-5">
+  <h1>{{ isEditMode ? 'Editare articol' : 'Articol nou' }}</h1>
+
+  <!-- TODO Lab 12: Implementati formularul cu reactive forms -->
+  <!-- - [formGroup]="form" pe <form> + (ngSubmit)="onSubmit()"                  -->
+  <!-- - <input formControlName="title">, <textarea formControlName="content">  -->
+  <!-- - <select formControlName="categoryId"> populat din *ngFor pe categories -->
+  <!-- - Mesaje validare per camp (form.get('title')?.errors)                   -->
+  <!-- - Submit disabled cand form.invalid; Anuleaza apeleaza cancel()          -->
+
+  <div class="alert alert-info">
+    Formularul nu este inca implementat.
+    <br>
+    A se vedea <code>// TODO Lab 12</code> in
+    <code>article-form.component.ts</code> si template-ul acestui fisier.
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <button type="button" class="btn btn-secondary" (click)="cancel()">Inapoi la lista</button>
+</div>
