@@ -1,0 +1,41 @@
+@model CreateArticleViewModel
+
+@{
+    ViewData["Title"] = "Articol nou";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1>Articol nou</h1>
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Content" class="form-label"></label>
+                <textarea asp-for="Content" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label"></label>
+                <select asp-for="CategoryId" class="form-select"
+                        asp-items="Model.Categories">
+                    <option value="">-- Selectați --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Imagine articol (opțional)</label>
+                <input type="file" name="Upload" class="form-control" accept="image/*" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Salvare</button>
+            <a asp-action="Index" class="btn btn-secondary">Anulare</a>
+        </form>
+    </div>
+</div>

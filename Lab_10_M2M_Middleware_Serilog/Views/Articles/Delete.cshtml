@@ -1,0 +1,22 @@
+@model ArticleViewModel
+
+@{
+    ViewData["Title"] = "Ștergere articol";
+}
+
+<div class="alert alert-warning">
+    <strong>Atenție!</strong> Ștergerea nu poate fi anulată.
+</div>
+
+<h2>@Model.Title</h2>
+<p class="text-muted">
+    <strong>Categorie:</strong> @Model.CategoryName |
+    <strong>Autor:</strong> @Model.AuthorName
+</p>
+<p>@Model.Content</p>
+
+<form asp-action="Delete" method="post" class="mt-4">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Ștergere confirmată</button>
+    <a asp-action="Index" class="btn btn-secondary">Anulare</a>
+</form>
