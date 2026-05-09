@@ -1,0 +1,66 @@
+@model HomeViewModel
+
+@{
+    ViewData["Title"] = "Acasă";
+}
+
+<div class="text-center mb-5">
+    <h1>News Portal</h1>
+    <p class="lead text-muted">Știrile tale, într-un singur loc.</p>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3>@Model.TotalArticles</h3>
+                <p class="text-muted">Articole publicate</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3>@Model.TotalCategories</h3>
+                <p class="text-muted">Categorii</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="mb-3">Cele mai recente articole</h2>
+
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+    @foreach (var article in Model.RecentArticles)
+    {
+        <div class="col">
+            <div class="card h-100">
+                @if (article.ImagePath != null)
+                {
+                    <img src="@article.ImagePath" class="card-img-top"
+                         alt="@article.Title"
+                         style="height: 180px; object-fit: cover;" />
+                }
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">@article.Title</h5>
+                    <p class="card-text">
+                        @(article.Content.Length > 80
+                            ? article.Content[..80] + "..."
+                            : article.Content)
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">@article.CategoryName — @article.PublishedAt.ToShortDateString()</small>
+                    <a asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id"
+                       class="btn btn-sm btn-info float-end">Citește</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="text-center">
+    <a asp-controller="Articles" asp-action="Index" class="btn btn-outline-primary">
+        Vezi toate articolele
+    </a>
+</div>

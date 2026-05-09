@@ -1,0 +1,74 @@
+@model List<ArticleViewModel>
+
+@{
+    ViewData["Title"] = "Articole";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Articole</h1>
+    <a asp-action="Create" class="btn btn-primary">+ Articol nou</a>
+</div>
+
+@if (Model == null || !Model.Any())
+{
+    <p class="text-muted">Nu sunt articole.</p>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var article in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    @if (article.ImagePath != null)
+                    {
+                        <img src="@article.ImagePath" class="card-img-top"
+                             alt="@article.Title"
+                             style="height: 200px; object-fit: cover;" />
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">@article.Title</h5>
+                        <p class="card-text">
+                            @(article.Content.Length > 100
+                                ? article.Content[..100] + "..."
+                                : article.Content)
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted fst-italic">
+                            @article.CategoryName — @article.AuthorName — @article.PublishedAt.ToShortDateString()
+                        </small>
+                        <div class="mt-2">
+                            <a asp-action="Details" asp-route-id="@article.Id"
+                               class="btn btn-sm btn-info">Detalii</a>
+                            <a asp-action="Edit" asp-route-id="@article.Id"
+                               class="btn btn-sm btn-warning">Editare</a>
+                            <a asp-action="Delete" asp-route-id="@article.Id"
+                               class="btn btn-sm btn-danger">Ștergere</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">Anterior</a>
+                </li>
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                    </li>
+                }
+                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">Următor</a>
+                </li>
+            </ul>
+        </nav>
+    }
+}
