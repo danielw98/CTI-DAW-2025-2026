@@ -1,6 +1,6 @@
 # CTI - Dezvoltarea Aplicatiilor Web (2025-2026)
 
-Materiale de laborator pentru cursul **Dezvoltarea Aplicatiilor Web**, specializarea CTI.
+Materiale de laborator pentru cursul **Dezvoltarea Aplicatiilor Web** (Proiectarea Aplicatiilor Web), specializarea CTI.
 
 Site: [daw.danielwagner.ro](https://daw.danielwagner.ro)
 
