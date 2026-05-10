@@ -1,7 +1,11 @@
-import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  ReactiveFormsModule, FormBuilder, FormGroup, Validators,
+  AbstractControl, ValidationErrors
+} from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../core/services/auth';
 
 function passwordsMatch(group: AbstractControl): ValidationErrors | null {
   const pwd = group.get('password')?.value;
@@ -11,20 +15,21 @@ function passwordsMatch(group: AbstractControl): ValidationErrors | null {
 
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  templateUrl: './register.html',
+  styleUrl: './register.css'
 })
-export class RegisterComponent {
+export class Register {
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private authService = inject(AuthService);
+
   registerForm: FormGroup;
   loading = false;
   submitted = false;
   error: string | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private authService: AuthService
-  ) {
+  constructor() {
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       fullName: ['', [Validators.required, Validators.minLength(3)]],
@@ -43,12 +48,11 @@ export class RegisterComponent {
     this.error = null;
 
     const { email, fullName, password } = this.registerForm.value;
+
     this.authService.register(email, fullName, password).subscribe({
       next: () => this.router.navigateByUrl('/articles'),
       error: err => {
-        this.error = err.error?.message
-          ?? err.error?.errors?.join(', ')
-          ?? 'Inregistrarea a esuat';
+        this.error = err.error?.message ?? 'Inregistrare esuata';
         this.loading = false;
       }
     });

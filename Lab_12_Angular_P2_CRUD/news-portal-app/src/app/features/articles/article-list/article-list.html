@@ -24,19 +24,17 @@
             Autor: {{ article.authorName }} ·
             {{ article.publishedAt | date:'dd MMM yyyy' }}
           </small>
-          <div class="d-flex gap-2">
-            <button class="btn btn-sm btn-primary" (click)="viewArticle(article.id)">
-              Detalii
+          <button class="btn btn-sm btn-primary" (click)="viewArticle(article.id)">
+            Detalii
+          </button>
+          <ng-container *ngIf="canModify(article)">
+            <button class="btn btn-sm btn-warning ms-1" (click)="editArticle(article.id, $event)">
+              Editeaza
             </button>
-            <ng-container *ngIf="canModify(article)">
-              <button class="btn btn-sm btn-warning" (click)="editArticle(article.id, $event)">
-                Editeaza
-              </button>
-              <button class="btn btn-sm btn-danger" (click)="deleteArticle(article.id, $event)">
-                Sterge
-              </button>
-            </ng-container>
-          </div>
+            <button class="btn btn-sm btn-danger ms-1" (click)="deleteArticle(article.id, $event)">
+              Sterge
+            </button>
+          </ng-container>
         </div>
       </div>
     </div>

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CurrentUser } from '../../shared/models/article.model';
+import { CurrentUser } from '../../shared/models/article';
 
 interface AuthResponse {
   token: string;
@@ -11,11 +11,13 @@ interface AuthResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private http = inject(HttpClient);
+
   private apiUrl = `${environment.apiUrl}/api/auth`;
   private currentUserSubject = new BehaviorSubject<CurrentUser | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.loadUserFromToken();
   }
 
@@ -40,6 +42,10 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem('token');
+  }
+
+  get currentUser(): CurrentUser | null {
+    return this.currentUserSubject.value;
   }
 
   private handleAuthResponse(token: string): void {

@@ -1,0 +1,24 @@
+<div class="container mt-5" style="max-width: 800px;">
+  <div *ngIf="loading" class="alert alert-info">Se incarca...</div>
+
+  <div *ngIf="notFound" class="text-center">
+    <div class="alert alert-warning">Articolul nu a fost gasit.</div>
+    <a routerLink="/articles" class="btn btn-secondary">Inapoi la lista</a>
+  </div>
+
+  <article *ngIf="article">
+    <a routerLink="/articles" class="btn btn-link p-0 mb-3">&larr; Inapoi la lista</a>
+    <h1>{{ article.title }}</h1>
+    <p class="text-muted">
+      <span class="badge bg-secondary me-2">{{ article.categoryName }}</span>
+      Autor: {{ article.authorName }} ·
+      {{ article.publishedAt | date:'dd MMMM yyyy' }}
+    </p>
+    <hr>
+    <div class="article-content">{{ article.content }}</div>
+
+    <div *ngIf="article.tags?.length" class="mt-4">
+      <span *ngFor="let tag of article.tags" class="badge bg-info me-1">{{ tag }}</span>
+    </div>
+  </article>
+</div>

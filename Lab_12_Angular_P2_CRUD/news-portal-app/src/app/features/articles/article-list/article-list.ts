@@ -1,26 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ArticleService } from '../../../core/services/article.service';
-import { AuthService } from '../../../core/services/auth.service';
-import { Article } from '../../../shared/models/article.model';
+import { ArticleService } from '../../../core/services/article';
+import { AuthService } from '../../../core/services/auth';
+import { Article, CurrentUser } from '../../../shared/models/article';
 
 @Component({
   selector: 'app-article-list',
-  templateUrl: './article-list.component.html',
-  styleUrl: './article-list.component.css'
+  imports: [CommonModule],
+  templateUrl: './article-list.html',
+  styleUrl: './article-list.css'
 })
-export class ArticleListComponent implements OnInit {
+export class ArticleList implements OnInit {
+  private articleService = inject(ArticleService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   articles: Article[] = [];
   loading = true;
   error: string | null = null;
-
-  constructor(
-    private articleService: ArticleService,
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  currentUser: CurrentUser | null = null;
 
   ngOnInit(): void {
+    this.authService.currentUser$.subscribe(u => this.currentUser = u);
     this.loadArticles();
   }
 
@@ -43,9 +45,7 @@ export class ArticleListComponent implements OnInit {
   }
 
   canModify(article: Article): boolean {
-    // TODO Lab 12: returnati true daca user-ul curent este Admin SAU autorul articolului
-    // Hint: cititi user-ul curent prin AuthService (currentUser$ sau o metoda noua)
-    //       si verificati article.authorId === user.id || user.roles.includes('Admin')
+    // TODO Lab 12 (Ex 4): return true daca currentUser e Admin sau autorul articolului
     return false;
   }
 
@@ -64,8 +64,6 @@ export class ArticleListComponent implements OnInit {
 
   deleteArticle(id: number, event: Event): void {
     event.stopPropagation();
-    // TODO Lab 12: confirmati cu confirm(), apoi articleService.delete(id).subscribe(...)
-    // La succes: reincarcati lista (apelati loadArticles() sau filtrati local)
-    // La eroare: setati this.error
+    // TODO Lab 12 (Ex 4): confirm() + articleService.delete(id) + filter local
   }
 }
