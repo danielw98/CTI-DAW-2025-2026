@@ -6,15 +6,15 @@
     </button>
   </div>
 
-  <div *ngIf="loading" class="alert alert-info">Se incarca...</div>
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div *ngIf="loading()" class="alert alert-info">Se incarca...</div>
+  <div *ngIf="error()" class="alert alert-danger">{{ error() }}</div>
 
-  <div *ngIf="!loading && articles.length === 0" class="alert alert-warning">
+  <div *ngIf="!loading() && !error() && articles().length === 0" class="alert alert-warning">
     Nu sunt articole disponibile.
   </div>
 
-  <div *ngIf="!loading" class="row">
-    <div *ngFor="let article of articles" class="col-md-6 col-lg-4 mb-4">
+  <div *ngIf="!loading() && !error()" class="row">
+    <div *ngFor="let article of articles()" class="col-md-6 col-lg-4 mb-4">
       <div class="card h-100">
         <div class="card-body">
           <h5 class="card-title">{{ article.title }}</h5>

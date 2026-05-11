@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
@@ -17,9 +17,9 @@ export class Login {
   private authService = inject(AuthService);
 
   loginForm: FormGroup;
-  loading = false;
-  submitted = false;
-  error: string | null = null;
+  loading = signal(false);
+  submitted = signal(false);
+  error = signal<string | null>(null);
 
   constructor() {
     this.loginForm = this.fb.group({
@@ -31,11 +31,11 @@ export class Login {
   get f() { return this.loginForm.controls; }
 
   onSubmit(): void {
-    this.submitted = true;
+    this.submitted.set(true);
     if (this.loginForm.invalid) return;
 
-    this.loading = true;
-    this.error = null;
+    this.loading.set(true);
+    this.error.set(null);
 
     this.authService.login(this.f['email'].value, this.f['password'].value).subscribe({
       next: () => {
@@ -43,8 +43,8 @@ export class Login {
         this.router.navigateByUrl(returnUrl);
       },
       error: err => {
-        this.error = err.error?.message ?? 'Email sau parola incorecta';
-        this.loading = false;
+        this.error.set(err.error?.message ?? 'Email sau parola incorecta');
+        this.loading.set(false);
       }
     });
   }

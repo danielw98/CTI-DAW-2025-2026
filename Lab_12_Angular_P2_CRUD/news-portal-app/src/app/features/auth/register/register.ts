@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule, FormBuilder, FormGroup, Validators,
@@ -25,9 +25,9 @@ export class Register {
   private authService = inject(AuthService);
 
   registerForm: FormGroup;
-  loading = false;
-  submitted = false;
-  error: string | null = null;
+  loading = signal(false);
+  submitted = signal(false);
+  error = signal<string | null>(null);
 
   constructor() {
     this.registerForm = this.fb.group({
@@ -41,19 +41,19 @@ export class Register {
   get f() { return this.registerForm.controls; }
 
   onSubmit(): void {
-    this.submitted = true;
+    this.submitted.set(true);
     if (this.registerForm.invalid) return;
 
-    this.loading = true;
-    this.error = null;
+    this.loading.set(true);
+    this.error.set(null);
 
     const { email, fullName, password } = this.registerForm.value;
 
     this.authService.register(email, fullName, password).subscribe({
       next: () => this.router.navigateByUrl('/articles'),
       error: err => {
-        this.error = err.error?.message ?? 'Inregistrare esuata';
-        this.loading = false;
+        this.error.set(err.error?.message ?? 'Inregistrare esuata');
+        this.loading.set(false);
       }
     });
   }

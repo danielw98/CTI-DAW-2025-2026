@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ArticleService } from '../../../core/services/article';
@@ -14,26 +14,26 @@ export class ArticleDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private articleService = inject(ArticleService);
 
-  article: Article | null = null;
-  loading = true;
-  notFound = false;
+  article = signal<Article | null>(null);
+  loading = signal(true);
+  notFound = signal(false);
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (!id) {
-      this.notFound = true;
-      this.loading = false;
+      this.notFound.set(true);
+      this.loading.set(false);
       return;
     }
 
     this.articleService.getById(id).subscribe({
       next: article => {
-        this.article = article;
-        this.loading = false;
+        this.article.set(article);
+        this.loading.set(false);
       },
       error: () => {
-        this.notFound = true;
-        this.loading = false;
+        this.notFound.set(true);
+        this.loading.set(false);
       }
     });
   }

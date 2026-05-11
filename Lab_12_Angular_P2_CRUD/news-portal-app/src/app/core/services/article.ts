@@ -22,17 +22,17 @@ export class ArticleService {
   }
 
   create(dto: CreateArticleDto): Observable<Article> {
-    // TODO Lab 12 (Ex 1): POST /api/articles cu dto in body
+    // TODO Lab 12 (Ex 1): return this.http.post<Article>(this.apiUrl, dto);
     throw new Error('TODO Lab 12: implementati create()');
   }
 
   update(id: number, dto: UpdateArticleDto): Observable<void> {
-    // TODO Lab 12 (Ex 1): PUT /api/articles/{id} cu dto in body
+    // TODO Lab 12 (Ex 1): return this.http.put<void>(`${this.apiUrl}/${id}`, dto);
     throw new Error('TODO Lab 12: implementati update()');
   }
 
   delete(id: number): Observable<void> {
-    // TODO Lab 12 (Ex 1): DELETE /api/articles/{id}
+    // TODO Lab 12 (Ex 1): return this.http.delete<void>(`${this.apiUrl}/${id}`);
     throw new Error('TODO Lab 12: implementati delete()');
   }
 }

@@ -2,12 +2,12 @@ export interface Article {
   id: number;
   title: string;
   content: string;
-  publishedAt: string;       // ISO date string din JSON
+  publishedAt: string;
   categoryId: number;
   categoryName: string;
   authorId: string;
   authorName: string;
-  tags?: string[];           // optional - poate lipsi
+  tags?: string[];
 }
 
 export interface Category {

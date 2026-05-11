@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ArticleService } from '../../../core/services/article';
@@ -16,26 +16,26 @@ export class ArticleList implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  articles: Article[] = [];
-  loading = true;
-  error: string | null = null;
-  currentUser: CurrentUser | null = null;
+  articles = signal<Article[]>([]);
+  loading = signal(true);
+  error = signal<string | null>(null);
+  currentUser = signal<CurrentUser | null>(null);
 
   ngOnInit(): void {
-    this.authService.currentUser$.subscribe(u => this.currentUser = u);
+    this.authService.currentUser$.subscribe(u => this.currentUser.set(u));
     this.loadArticles();
   }
 
   private loadArticles(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.articleService.getAll().subscribe({
       next: articles => {
-        this.articles = articles;
-        this.loading = false;
+        this.articles.set(articles);
+        this.loading.set(false);
       },
       error: () => {
-        this.error = 'Nu s-au putut incarca articolele';
-        this.loading = false;
+        this.error.set('Nu s-au putut incarca articolele');
+        this.loading.set(false);
       }
     });
   }
@@ -64,6 +64,6 @@ export class ArticleList implements OnInit {
 
   deleteArticle(id: number, event: Event): void {
     event.stopPropagation();
-    // TODO Lab 12 (Ex 4): confirm() + articleService.delete(id) + filter local
+    // TODO Lab 12 (Ex 4): confirm() + articleService.delete(id).subscribe + filter local via this.articles.update(...)
   }
 }

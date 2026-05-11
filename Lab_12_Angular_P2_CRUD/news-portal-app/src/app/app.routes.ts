@@ -11,6 +11,7 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'articles', component: ArticleList },
+  // IMPORTANT: 'articles/new' inainte de 'articles/:id' altfel :id ar prinde 'new'
   { path: 'articles/new', component: ArticleForm, canActivate: [authGuard] },
   { path: 'articles/:id/edit', component: ArticleForm, canActivate: [authGuard] },
   { path: 'articles/:id', component: ArticleDetail },

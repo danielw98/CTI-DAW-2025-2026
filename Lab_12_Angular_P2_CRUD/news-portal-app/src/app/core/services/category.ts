@@ -10,7 +10,7 @@ export class CategoryService {
   private apiUrl = `${environment.apiUrl}/api/categories`;
 
   getAll(): Observable<Category[]> {
-    // TODO Lab 12 (Ex 1): GET /api/categories
+    // TODO Lab 12 (Ex 1): return this.http.get<Category[]>(this.apiUrl);
     throw new Error('TODO Lab 12: implementati getAll()');
   }
 }
