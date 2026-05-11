@@ -1,0 +1,23 @@
+# TODO Lab 13 (Sectiunea 01 - .dockerignore)
+# Exclude din build context tot ce nu trebuie in image-ul .NET API.
+
+**/bin/
+**/obj/
+Lab12.Tests/
+news-portal-app/
+**/.vs/
+**/.vscode/
+**/*.user
+.git/
+.github/
+**/.DS_Store
+certs/
+*.env
+!.env.example
+**/logs/
+**/*.log
+README.md
+*.md
+Dockerfile
+docker-compose.yml
+.dockerignore

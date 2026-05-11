@@ -1,0 +1,60 @@
+# TODO Lab 13 (Sectiunea 02 - docker-compose stack complet)
+#
+# Defineste 4 servicii orchestrate:
+#  - db        Postgres 16-alpine cu volume persistent + healthcheck
+#  - api       build din Dockerfile-ul tau, depends_on db (healthy)
+#  - frontend  build din ./news-portal-app/Dockerfile
+#  - proxy     nginx 1.27-alpine cu ports 80/443, monteaza ./nginx + ./certs
+#
+# Ruleaza: docker compose up -d --build
+# Verifica: https://localhost (warn cert self-signed)
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: newsportal-db
+    environment:
+      POSTGRES_USER: ${DB_USER:-newsportal}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-newsportal_dev}
+      POSTGRES_DB: ${DB_NAME:-newsportal}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    # TODO: adauga healthcheck cu pg_isready
+    networks: [newsportal_net]
+    restart: unless-stopped
+
+  # TODO: adauga serviciul `api` care:
+  #   - build context ./backend
+  #   - dockerfile Dockerfile (cel scris de tine in sectiunea 01)
+  #   - depends_on db cu condition: service_healthy
+  #   - environment: ConnectionStrings__DefaultConnection (vezi .env.example)
+  #   - environment: Jwt__Key (din .env)
+  #   - expose: 8080
+  #   - networks: [newsportal_net]
+  # api:
+  #   build: ...
+
+  # TODO: adauga serviciul `frontend` care:
+  #   - build context ./news-portal-app
+  #   - depends_on api
+  #   - expose 80
+  # frontend:
+  #   build: ...
+
+  # TODO: adauga serviciul `proxy` care:
+  #   - image nginx:1.27-alpine
+  #   - depends_on api, frontend
+  #   - ports 80:80 si 443:443
+  #   - volume ./nginx/nginx.conf -> /etc/nginx/nginx.conf
+  #   - volume ./nginx/conf.d -> /etc/nginx/conf.d
+  #   - volume ./certs -> /etc/nginx/certs
+  # proxy:
+  #   image: nginx:1.27-alpine
+  #   ...
+
+volumes:
+  db_data:
+
+networks:
+  newsportal_net:
+    driver: bridge

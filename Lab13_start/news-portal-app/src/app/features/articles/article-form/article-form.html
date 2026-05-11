@@ -1,0 +1,45 @@
+<div class="container mt-5" style="max-width: 720px;">
+  <h1>{{ isEditMode() ? 'Editare articol' : 'Articol nou' }}</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="mb-3">
+      <label for="title" class="form-label">Titlu</label>
+      <input id="title" class="form-control" formControlName="title">
+      <div *ngIf="form.get('title')?.touched && form.get('title')?.errors as e"
+           class="text-danger small">
+        <span *ngIf="e['required']">Titlul este obligatoriu.</span>
+        <span *ngIf="e['minlength']">Minim {{ e['minlength'].requiredLength }} caractere.</span>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="content" class="form-label">Continut</label>
+      <textarea id="content" rows="8" class="form-control" formControlName="content"></textarea>
+      <div *ngIf="form.get('content')?.touched && form.get('content')?.errors as e"
+           class="text-danger small">
+        <span *ngIf="e['required']">Continutul este obligatoriu.</span>
+        <span *ngIf="e['minlength']">Minim {{ e['minlength'].requiredLength }} caractere.</span>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="categoryId" class="form-label">Categorie</label>
+      <select id="categoryId" class="form-select" formControlName="categoryId">
+        <option [ngValue]="null" disabled>-- alege --</option>
+        <option *ngFor="let c of categories()" [ngValue]="c.id">{{ c.name }}</option>
+      </select>
+      <div *ngIf="form.get('categoryId')?.touched && form.get('categoryId')?.errors?.['required']"
+           class="text-danger small">
+        Selectati o categorie.
+      </div>
+    </div>
+
+    <div *ngIf="error()" class="alert alert-danger">{{ error() }}</div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid || loading()">
+      {{ loading() ? 'Se salveaza...' : (isEditMode() ? 'Salveaza modificarile' : 'Publica articolul') }}
+    </button>
+    <button type="button" class="btn btn-secondary ms-2" (click)="cancel()">Anuleaza</button>
+  </form>
+</div>

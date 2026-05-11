@@ -1,0 +1,19 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+  <a class="navbar-brand" routerLink="/articles">News Portal</a>
+
+  <ul class="navbar-nav me-auto">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/articles" routerLinkActive="active">Articole</a>
+    </li>
+  </ul>
+
+  <ng-container *ngIf="currentUser$ | async as user; else anon">
+    <span class="navbar-text me-3">{{ user.name }}</span>
+    <button class="btn btn-outline-light btn-sm" (click)="logout()">Deconectare</button>
+  </ng-container>
+
+  <ng-template #anon>
+    <a class="nav-link text-light me-2" routerLink="/login">Login</a>
+    <a class="nav-link text-light" routerLink="/register">Register</a>
+  </ng-template>
+</nav>
