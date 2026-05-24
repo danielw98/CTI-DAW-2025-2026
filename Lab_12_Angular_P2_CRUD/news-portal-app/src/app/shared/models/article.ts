@@ -5,12 +5,18 @@ export interface Article {
   publishedAt: string;
   categoryId: number;
   categoryName: string;
-  authorId: string;
+  authorId: string | null;
   authorName: string;
-  tags?: string[];
+  imagePath?: string | null;
+  tags: Tag[];
 }
 
 export interface Category {
+  id: number;
+  name: string;
+}
+
+export interface Tag {
   id: number;
   name: string;
 }
@@ -26,10 +32,12 @@ export interface CreateArticleDto {
   title: string;
   content: string;
   categoryId: number;
+  tagIds?: number[];
 }
 
 export interface UpdateArticleDto {
   title: string;
   content: string;
   categoryId: number;
+  tagIds?: number[];
 }

@@ -14,11 +14,15 @@
       Autor: {{ a.authorName }} &middot;
       {{ a.publishedAt | date:'dd MMMM yyyy' }}
     </p>
-    <hr>
-    <div class="article-content">{{ a.content }}</div>
 
-    <div *ngIf="a.tags?.length" class="mt-4">
-      <span *ngFor="let tag of a.tags" class="badge bg-info me-1">{{ tag }}</span>
+    <img *ngIf="a.imagePath" [src]="backendUrl + a.imagePath" alt="{{ a.title }}"
+         class="img-fluid rounded mb-3" style="max-height: 420px;">
+
+    <hr>
+    <div class="article-content" style="white-space: pre-wrap;">{{ a.content }}</div>
+
+    <div *ngIf="a.tags.length" class="mt-4">
+      <span *ngFor="let t of a.tags" class="badge bg-info me-1">{{ t.name }}</span>
     </div>
   </article>
 </div>

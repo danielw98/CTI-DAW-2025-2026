@@ -16,12 +16,20 @@
   <div *ngIf="!loading() && !error()" class="row">
     <div *ngFor="let article of articles()" class="col-md-6 col-lg-4 mb-4">
       <div class="card h-100">
+        <img *ngIf="article.imagePath"
+             [src]="backendUrl + article.imagePath"
+             alt="{{ article.title }}"
+             class="card-img-top"
+             style="height: 180px; object-fit: cover;">
         <div class="card-body">
           <h5 class="card-title">{{ article.title }}</h5>
           <p class="text-muted mb-2">{{ article.categoryName }}</p>
           <p class="card-text">{{ article.content | slice:0:120 }}...</p>
+          <div *ngIf="article.tags.length" class="mb-2">
+            <span *ngFor="let t of article.tags" class="badge bg-info me-1">{{ t.name }}</span>
+          </div>
           <small class="text-muted d-block mb-2">
-            Autor: {{ article.authorName }} ·
+            Autor: {{ article.authorName }} &middot;
             {{ article.publishedAt | date:'dd MMM yyyy' }}
           </small>
           <button class="btn btn-sm btn-primary" (click)="viewArticle(article.id)">

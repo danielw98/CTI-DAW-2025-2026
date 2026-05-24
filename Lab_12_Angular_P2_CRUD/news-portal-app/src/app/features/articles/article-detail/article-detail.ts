@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ArticleService } from '../../../core/services/article';
 import { Article } from '../../../shared/models/article';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-article-detail',
@@ -13,6 +14,9 @@ import { Article } from '../../../shared/models/article';
 export class ArticleDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private articleService = inject(ArticleService);
+
+  // SCAFFOLD pre-built Lab12: backendUrl pt afisarea imaginii din wwwroot
+  readonly backendUrl = environment.apiUrl;
 
   article = signal<Article | null>(null);
   loading = signal(true);

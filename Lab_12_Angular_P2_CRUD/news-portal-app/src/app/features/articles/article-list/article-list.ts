@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ArticleService } from '../../../core/services/article';
 import { AuthService } from '../../../core/services/auth';
 import { Article, CurrentUser } from '../../../shared/models/article';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-article-list',
@@ -15,6 +16,9 @@ export class ArticleList implements OnInit {
   private articleService = inject(ArticleService);
   private authService = inject(AuthService);
   private router = inject(Router);
+
+  // SCAFFOLD pre-built Lab12: backendUrl pt thumbnail-uri imagini
+  readonly backendUrl = environment.apiUrl;
 
   articles = signal<Article[]>([]);
   loading = signal(true);

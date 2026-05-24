@@ -6,4 +6,8 @@ public record ArticleDto(
     string Content,
     DateTime PublishedAt,
     string CategoryName,
-    string AuthorName);
+    int CategoryId,
+    string AuthorName,
+    string? AuthorId,
+    string? ImagePath,
+    List<TagDto> Tags);

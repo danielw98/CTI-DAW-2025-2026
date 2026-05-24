@@ -13,7 +13,7 @@ public class Article : BaseEntity
     public string Content { get; set; } = string.Empty;
 
     [DataType(DataType.Date)]
-    public DateTime PublishedAt { get; set; } = DateTime.Now;
+    public DateTime PublishedAt { get; set; } = DateTime.UtcNow;
 
     public int CategoryId { get; set; }
     public Category? Category { get; set; }

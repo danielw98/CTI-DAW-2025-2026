@@ -11,7 +11,11 @@ public static class ArticleMappings
         Content: article.Content,
         PublishedAt: article.PublishedAt,
         CategoryName: article.Category?.Name ?? "N/A",
-        AuthorName: article.Author?.FullName ?? "N/A");
+        CategoryId: article.CategoryId,
+        AuthorName: article.Author?.FullName ?? "N/A",
+        AuthorId: article.AuthorId,
+        ImagePath: article.ImagePath,
+        Tags: article.Tags?.Select(t => new TagDto(t.Id, t.Name)).ToList() ?? new List<TagDto>());
 
     public static List<ArticleDto> ToDtoList(this IEnumerable<Article> articles)
         => articles.Select(a => a.ToDto()).ToList();

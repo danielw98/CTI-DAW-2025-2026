@@ -1,10 +1,90 @@
+<!--
+  SCAFFOLD pre-built Lab12: template-ul e complet (formularul + tag selector + file input).
+  Exercitiile 2 si 3 cer doar implementarea logicii TS (form group, submit, edit mode).
+  Validation display, multi-select pe tags si <input type="file"> sunt deja wire-uite.
+-->
 <div class="container mt-5" style="max-width: 720px;">
   <h1>{{ isEditMode() ? 'Editare articol' : 'Articol nou' }}</h1>
 
-  <!-- TODO Lab 12 (Ex 2): form cu [formGroup]="form" (ngSubmit)="onSubmit()" -->
-  <!-- 3 grupuri: title (required+minLength(5)), content (required+minLength(20)), categoryId (required) -->
-  <!-- mesaje validare per camp + buton submit + buton cancel -->
-  <p class="text-muted">TODO Lab 12 (Ex 2): completati formularul.</p>
+  <div *ngIf="error() as err" class="alert alert-danger">{{ err }}</div>
 
-  <button type="button" class="btn btn-secondary" (click)="cancel()">Anuleaza</button>
+  <form *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+    <!-- TITLE -->
+    <div class="mb-3">
+      <label for="title" class="form-label">Titlu</label>
+      <input id="title" class="form-control" formControlName="title">
+      <div *ngIf="form.get('title')?.touched && form.get('title')?.errors as e" class="text-danger small">
+        <span *ngIf="e['required']">Titlul este obligatoriu.</span>
+        <span *ngIf="e['minlength']">Minim {{ e['minlength'].requiredLength }} caractere.</span>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="mb-3">
+      <label for="content" class="form-label">Continut</label>
+      <textarea id="content" class="form-control" rows="8" formControlName="content"></textarea>
+      <div *ngIf="form.get('content')?.touched && form.get('content')?.errors as e" class="text-danger small">
+        <span *ngIf="e['required']">Continutul este obligatoriu.</span>
+        <span *ngIf="e['minlength']">Minim {{ e['minlength'].requiredLength }} caractere.</span>
+      </div>
+    </div>
+
+    <!-- CATEGORY -->
+    <div class="mb-3">
+      <label for="categoryId" class="form-label">Categorie</label>
+      <select id="categoryId" class="form-select" formControlName="categoryId">
+        <option [ngValue]="null">-- alegeti --</option>
+        <option *ngFor="let c of categories()" [ngValue]="c.id">{{ c.name }}</option>
+      </select>
+      <div *ngIf="form.get('categoryId')?.touched && form.get('categoryId')?.errors?.['required']"
+           class="text-danger small">
+        Categoria este obligatorie.
+      </div>
+    </div>
+
+    <!-- TAGS - scaffold pre-built: multi-select prin checkbox-uri -->
+    <div class="mb-3">
+      <label class="form-label">Tag-uri</label>
+      <div class="d-flex flex-wrap gap-2 p-2 border rounded">
+        <ng-container *ngFor="let tag of allTags()">
+          <label class="badge bg-light text-dark border" style="cursor: pointer;">
+            <input type="checkbox"
+                   class="form-check-input me-1"
+                   [value]="tag.id"
+                   [checked]="(form.get('tagIds')?.value || []).includes(tag.id)"
+                   (change)="onTagToggle(tag.id, $any($event.target).checked)">
+            {{ tag.name }}
+          </label>
+        </ng-container>
+        <small *ngIf="allTags().length === 0" class="text-muted">Nu sunt tag-uri disponibile.</small>
+      </div>
+    </div>
+
+    <!-- IMAGE - scaffold pre-built: file input + preview pt imaginea existenta -->
+    <div class="mb-3">
+      <label for="image" class="form-label">Imagine (optional)</label>
+      <input id="image" type="file" class="form-control" accept="image/*" (change)="onFileSelected($event)">
+      <div *ngIf="existingImagePath() as path" class="mt-2">
+        <small class="text-muted d-block">Imagine actuala:</small>
+        <img [src]="backendUrl + path" alt="imagine articol" class="img-thumbnail mt-1" style="max-height: 200px;">
+      </div>
+      <small *ngIf="selectedFile" class="text-success d-block mt-1">
+        Selectat: {{ selectedFile.name }} ({{ (selectedFile.size / 1024) | number:'1.0-0' }} KB)
+      </small>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid || loading()">
+        {{ loading() ? 'Se salveaza...' : (isEditMode() ? 'Salveaza modificarile' : 'Publica articolul') }}
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">Anuleaza</button>
+    </div>
+  </form>
+
+  <!-- Fallback in starter, inainte ca studentul sa construiasca form-ul in ngOnInit -->
+  <div *ngIf="!form" class="alert alert-warning">
+    Formularul nu a fost initializat. Vezi ngOnInit (Ex 2/3 Lab 12).
+  </div>
 </div>

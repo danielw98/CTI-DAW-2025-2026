@@ -29,7 +29,7 @@ public class ArticleService : IArticleService
         _logger.LogInformation("Creating article {Title} by author {AuthorId}",
             article.Title, article.AuthorId);
 
-        article.PublishedAt = DateTime.Now;
+        article.PublishedAt = DateTime.UtcNow;
         await _unitOfWork.ArticleRepository.AddAsync(article, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

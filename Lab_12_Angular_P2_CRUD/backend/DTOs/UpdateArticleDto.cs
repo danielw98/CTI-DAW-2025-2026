@@ -5,4 +5,5 @@ namespace Lab12.DTOs;
 public record UpdateArticleDto(
     [Required, MinLength(5)] string Title,
     [Required, MinLength(20)] string Content,
-    [Required] int CategoryId);
+    [Required] int CategoryId,
+    List<int>? TagIds = null);

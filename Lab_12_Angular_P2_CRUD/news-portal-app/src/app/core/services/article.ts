@@ -35,4 +35,16 @@ export class ArticleService {
     // TODO Lab 12 (Ex 1): return this.http.delete<void>(`${this.apiUrl}/${id}`);
     throw new Error('TODO Lab 12: implementati delete()');
   }
+
+  // SCAFFOLD pre-built Lab12: image upload (multipart/form-data).
+  // Apelat din ArticleFormComponent.afterSave() daca user-ul a selectat un fisier.
+  // Studentul nu modifica aceasta metoda - vine functionala in Lab12_start.
+  uploadImage(articleId: number, file: File): Observable<{ imagePath: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<{ imagePath: string }>(
+      `${this.apiUrl}/${articleId}/image`,
+      formData
+    );
+  }
 }
